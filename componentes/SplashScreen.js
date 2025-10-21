@@ -1,14 +1,18 @@
 import React, { useEffect } from 'react';
 import { View, ActivityIndicator, Image, StyleSheet } from 'react-native';
- 
+import { auth } from './Firebase'; // importe o auth do firebase 
 const SplashScreen = ({ navigation }) => {
     useEffect(() => {
-        // Define a duração do splash (4 segundos)
-        const timer = setTimeout(() => {
-            navigation.replace('Home'); // Após o tempo, navega para a tela de login
-        }, 4000);
- 
-        return () => clearTimeout(timer); // Limpa o timer quando o componente for desmontado
+       const timer = setTimeout(() => {
+    const user = auth.currentUser;
+    if (user) {
+      navigation.replace('Home'); // Usuário logado vai pra Home
+    } else {
+      navigation.replace('Login'); // Se não, vai pra Login
+    }
+  }, 4000);
+
+  return () => clearTimeout(timer);
     }, [navigation]);
  
     return (
